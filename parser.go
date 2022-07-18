@@ -41,7 +41,7 @@ func (p *Parser) SaveToFile(out_file string) {
 
 // Get section names function returns a slice "array" of section names
 func (p Parser) GetSectionNames() []string {
-	r, _ := regexp.Compile(` *\[.*`)
+	r, _ := regexp.Compile(` *\[.*]`)
 	sections := get_certain_lines(p.text, r)
 	return sections
 }

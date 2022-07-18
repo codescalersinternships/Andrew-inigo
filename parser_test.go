@@ -16,27 +16,26 @@ server = 192.0.2.62
 port = 143
 file = "payroll.dat"`
 
-var dict1 = make(map[string]map[string]string)
-var p1 = Parser{file1, dict1}
-
-//test functions
-
 func TestGetSectionNames(t *testing.T) {
 	t.Run("running TestGetSectionNames:1 ", func(t *testing.T) {
+		p1 := Parser{}
+		p1.LoadFromString(file1)
 		got := p1.GetSectionNames()
-		want := []string{"owner", "database"}
+		want := []string{"[owner]", "[database]"}
 		if !reflect.DeepEqual(got, want) {
 			t.Errorf("got %q  want %q", got, want)
 		}
 	})
 }
 func TestGetSections(t *testing.T) {
+	p1 := Parser{}
+	p1.LoadFromString(file1)
 	t.Run("testing get sections:1", func(t *testing.T) {
 		want := map[string]map[string]string{
-			"owner":    {"name": "John Doe", "organization": "Acme Widgets Inc."},
-			"database": {"server": "192.0.2.62", "port": "143", "file": `"payroll.dat"`},
+			"[owner]":    {"name": "John Doe", "organization": "Acme Widgets Inc."},
+			"[database]": {"server": "192.0.2.62", "port": "143", "file": `"payroll.dat"`},
 		}
-		got := p1.GetSections()
+		got := p1.Parsing()
 		if !reflect.DeepEqual(want, got) {
 			t.Errorf("got %q  want %q", got, want)
 		}
@@ -44,28 +43,33 @@ func TestGetSections(t *testing.T) {
 	})
 }
 func TestMakeDict(t *testing.T) {
+	p1 := Parser{}
+	p1.LoadFromString(file1)
 	t.Run("trying first", func(t *testing.T) {
 		want := map[string]string{"server": "192.0.2.62",
 			"port": "143", "file": `"payroll.dat"`}
-		got := make_dictionary(file1, "database")
+		got := make_key_value_dict(file1, "[database]")
 		if !reflect.DeepEqual(got, want) {
 			t.Errorf("got %q \n want %q", got, want)
 		}
 	})
 	t.Run("trying second", func(t *testing.T) {
+		p1 := Parser{}
+		p1.LoadFromString(file1)
 		want := map[string]string{"name": "John Doe",
 			"organization": "Acme Widgets Inc."}
-		got := make_dictionary(file1, "owner")
+		got := make_key_value_dict(file1, "[owner]")
 		if !reflect.DeepEqual(got, want) {
 			t.Errorf("got %q \n want %q", got, want)
 		}
 	})
 }
 func TestGetValue(t *testing.T) {
+	p1 := Parser{}
+	p1.LoadFromString(file1)
 	t.Run("running testing of value-1", func(t *testing.T) {
-
 		want := "John Doe"
-		got := p1.Getvalue("owner", "name")
+		got := p1.Getvalue("[owner]", "name")
 		if want != got {
 			t.Errorf("got %q want %q", got, want)
 		}
@@ -74,7 +78,7 @@ func TestGetValue(t *testing.T) {
 	t.Run("running testing of value-2", func(t *testing.T) {
 
 		want := `"payroll.dat"`
-		got := p1.Getvalue("database", "file")
+		got := p1.Getvalue("[database]", "file")
 		if want != got {
 			t.Errorf("got %q want %q", got, want)
 		}
@@ -98,11 +102,13 @@ func TestGetValue(t *testing.T) {
 	})
 }
 func TestSetKeyValue(t *testing.T) {
+	p1 := Parser{}
+	p1.LoadFromString(file1)
 	//testing this by retriecing the value from the key
 	t.Run("running test SetKeyValue (add key:age value :21 to owner) :1", func(t *testing.T) {
-		p1.SetKeyValue("owner", "age", "21")
+		p1.SetKeyValue("[owner]", "age", "21")
 		want := "21"
-		got := p1.dict["owner"]["age"]
+		got := p1.dict["[owner]"]["age"]
 		if want != got {
 			t.Errorf("got %q , want %q", got, want)
 		}

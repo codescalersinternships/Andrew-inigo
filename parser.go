@@ -19,9 +19,11 @@ func (p Parser) GetSectionNames() []string {
 	}
 	return sections
 }
+
+//this function assign the dictionary to parser
 func (p Parser) GetSections() map[string]map[string]string {
 	var res_dict = make(map[string]map[string]string)
-	sections := p.GetSectionNames() //array of section name
+	sections := p.GetSectionNames() //array of section name instance and return it
 	for _, section := range sections {
 		dict2 := make_dictionary(p.file, section)
 		res_dict[section] = dict2

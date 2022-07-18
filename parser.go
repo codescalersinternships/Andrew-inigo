@@ -29,6 +29,16 @@ func (p *Parser) LoadFromString(Text string) {
 	p.dict = p.Parsing()
 }
 
+// SaveToFile function saves ini to file
+func (p *Parser) SaveToFile(out_file string) {
+	file, err := os.Create(out_file)
+	if err != nil {
+		panic(err)
+	}
+	file.WriteString(p.ToString())
+	file.Close()
+}
+
 // Get section names function returns a slice "array" of section names
 func (p Parser) GetSectionNames() []string {
 	r, _ := regexp.Compile(` *\[.*`)
@@ -81,7 +91,6 @@ func (p Parser) ToString() string {
 //helper functions
 //get certain lines function to get certain lines that match a given regular expression
 func get_certain_lines(file string, r *regexp.Regexp) []string {
-	//fmt.Println(file)
 	res := []string{}
 	lines := strings.Split(file, "\n")
 	for i := 0; i < len(lines); i++ {
@@ -125,7 +134,6 @@ func make_key_value_dict(file string, section string) map[string]string {
 	}
 	return nil
 }
-
 func main() {
 	p := Parser{}
 	str := p.LoadFromFile("file1.ini")
@@ -142,4 +150,5 @@ func main() {
 	p.SetKeyValue("[database]", "ip", "127.1.1.1")
 	str3 := p.ToString()
 	fmt.Println(str3)
+	p.SaveToFile("out_file.ini")
 }

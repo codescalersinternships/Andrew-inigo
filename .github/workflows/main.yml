@@ -1,0 +1,19 @@
+
+name: Go
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: set up GO
+        uses: actions/setup-go@v3
+        with: 
+           go-version: 1.18
+
+
+      - name: Run Test command (to run all tests)
+        run: go test -v 

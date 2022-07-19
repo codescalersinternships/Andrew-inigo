@@ -90,6 +90,7 @@ func (p Parser) GetSectionNames() []string {
 	return res
 }
 
+// Get sections return the dictionary
 func (p Parser) GetSections() map[string]map[string]string {
 	return p.dict
 }

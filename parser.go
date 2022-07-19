@@ -13,13 +13,10 @@ type Parser struct {
 }
 
 // Load from file function just reads the file context and add it to the the text attribute
-func (p *Parser) LoadFromFile(file string) string {
+func (p *Parser) LoadFromFile(file string) (string, error) {
 	dat, err := os.ReadFile(file)
-	if err != nil {
-		panic(err)
-	}
 	Text := string(dat)
-	return Text
+	return Text, err
 }
 
 // LoadFromString function parse the text and make the dictionary
@@ -69,8 +66,6 @@ func (p Parser) Getvalue(section, key string) string {
 
 //setkeyvalue functions add another key and value to a certain section
 func (p *Parser) SetKeyValue(section, key, value string) {
-	fmt.Println("------------------")
-	fmt.Println(p.dict)
 	p.dict[section][key] = value
 }
 
@@ -136,7 +131,7 @@ func make_key_value_dict(file string, section string) map[string]string {
 }
 func main() {
 	p := Parser{}
-	str := p.LoadFromFile("file1.ini")
+	str, _ := p.LoadFromFile("file1.ini")
 	p.LoadFromString(str)
 	fmt.Printf("%q", p.GetSectionNames())
 	fmt.Println()
@@ -150,5 +145,5 @@ func main() {
 	p.SetKeyValue("[database]", "ip", "127.1.1.1")
 	str3 := p.ToString()
 	fmt.Println(str3)
-	p.SaveToFile("out_file.ini")
+	//p.SaveToFile("out_file.ini")
 }

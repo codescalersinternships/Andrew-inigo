@@ -114,3 +114,22 @@ func TestSetKeyValue(t *testing.T) {
 		}
 	})
 }
+
+func TestLoadFromFile(t *testing.T) {
+	t.Run("running TestloadFromFile on valid file", func(t *testing.T) {
+		p1 := Parser{}
+		p1.LoadFromString(file1)
+		_, got := p1.LoadFromFile("file1.ini")
+		if got != nil {
+			t.Errorf("want Null , got %q", got)
+		}
+	})
+	t.Run("running TestloadFromFile on invalid file", func(t *testing.T) {
+		p1 := Parser{}
+		p1.LoadFromString(file1)
+		_, got := p1.LoadFromFile("invalid.ini")
+		if got == nil {
+			t.Errorf("want Error , got Null")
+		}
+	})
+}

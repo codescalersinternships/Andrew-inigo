@@ -46,14 +46,14 @@ func (p *Parser) Parsing(text string) error {
 	flag := true
 	for _, line := range lines {
 		line = strings.TrimSpace(line)
-		is_section, _ := regexp.MatchString(`^\[([^]]*)\]\s*$`, line)
+		is_section, _ := regexp.MatchString(`^\[[^\]\r\n]+]`, line)
 		if is_section {
 			section_name = line
 			//section_name = section_name[1 : len(section_name)-1]
 			p.dict[section_name] = make(map[string]string)
 			continue
 		}
-		is_key_val, _ := regexp.MatchString(`^(\w*)\s*=\s*(.*?)\s*$`, line)
+		is_key_val, _ := regexp.MatchString(`^([^=;\r\n]+)=([^;\r\n]*)`, line)
 		if is_key_val {
 			key_value := strings.Split(line, "=")
 			key_value[0] = strings.TrimSpace(key_value[0])
@@ -108,7 +108,10 @@ func (p Parser) Get(section, key string) (string, error) {
 }
 
 //Set functions add another key and value to a certain section
-func (p *Parser) Set(section, key, value string) {
+func (p *Parser) Set(section, key, value string) error {
+	if section == "" || key == "" {
+		return errors.New("section and key cant be empty")
+	}
 	if p.dict[section] == nil {
 		temp := make(map[string]string)
 		temp[key] = value
@@ -116,6 +119,7 @@ func (p *Parser) Set(section, key, value string) {
 	} else {
 		p.dict[section][key] = value
 	}
+	return nil
 }
 
 // ToString returns the string in INI format after changes happened to it

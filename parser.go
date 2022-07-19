@@ -28,10 +28,7 @@ func (p *Parser) LoadFromString(Text string) {
 
 // SaveToFile function saves ini to file
 func (p *Parser) SaveToFile(out_file string) {
-	file, err := os.Create(out_file)
-	if err != nil {
-		panic(err)
-	}
+	file, _ := os.Create(out_file)
 	file.WriteString(p.ToString())
 	file.Close()
 }

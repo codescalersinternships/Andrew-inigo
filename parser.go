@@ -13,6 +13,9 @@ type Parser struct {
 
 // LoadFromFile function just reads the file context and generate the dictionary
 func (p *Parser) LoadFromFile(file string) error {
+	if file[len(file)-3:] != "ini" {
+		return errors.New("wrong file name format")
+	}
 	dat, err := os.ReadFile(file)
 	if err == nil {
 		text := string(dat)

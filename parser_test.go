@@ -147,4 +147,11 @@ func TestLoadFromFile(t *testing.T) {
 			t.Errorf("there should be error here")
 		}
 	})
+	t.Run("running TestloadFromFile on invalid file name syntax ", func(t *testing.T) {
+		p1 := Parser{}
+		got := p1.LoadFromString("invalid_syntax_file.html")
+		if got == nil {
+			t.Errorf("there should be error here")
+		}
+	})
 }

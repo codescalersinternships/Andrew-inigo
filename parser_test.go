@@ -234,3 +234,13 @@ func TestLoadFromFile(t *testing.T) {
 		}
 	})
 }
+
+func TestSaveToFile(t *testing.T) {
+	t.Run("testing SaveToFIile with invalid format not .ini", func(t *testing.T) {
+		p1 := Parser{}
+		got := p1.SaveToFile("file1.html")
+		if got == nil {
+			t.Errorf("there should not be an error")
+		}
+	})
+}

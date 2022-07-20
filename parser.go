@@ -75,6 +75,9 @@ func (p *Parser) Parsing(text string) error {
 
 // SaveToFile function saves ini to file
 func (p *Parser) SaveToFile(out_file string) error {
+	if out_file[len(out_file)-3:] != "ini" {
+		return errors.New("wrong file format , it should be .ini")
+	}
 	file, err := os.Create(out_file)
 	file.Close()
 	if err != nil {
